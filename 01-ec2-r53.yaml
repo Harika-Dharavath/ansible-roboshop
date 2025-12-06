@@ -1,0 +1,25 @@
+- name: create ec2 and route 53
+  hosts: localhost
+  connection: local
+  vars:
+    ami_id: ami-09c813fb71547fc4f
+    sg_id: sg-0bb49640c5f48feab
+    zone_id: Z0365586HY4DMG76QJ9E
+    domain_name: daw86s.space
+    instance:
+    - mongodb # i can create multiple instances by adding more names here
+  tasks:
+  - name: create ec2 instance 
+    amazon.aws.ec2_instance:
+      name: "{{ item }}"
+      instance_type: t3.micro
+      security_group: "{{ sg_id }}"
+      image_id: "{{ ami_id }}"
+      tags:
+        Name: "{{ item }}" # to get a clear name in aws console
+    loop: "{{ instance }}"
+    register: ec2_output
+
+  - name: print the ec2 output
+    ansible.builtin.debug:
+      msg: "{{ ec2_output }}"  
