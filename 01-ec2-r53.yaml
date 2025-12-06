@@ -4,12 +4,12 @@
   vars:
     ami_id: ami-09c813fb71547fc4f
     sg_id: sg-0bb49640c5f48feab
-    zone_id: Z0365586HY4DMG76QJ9E
+    zone_id: "Z0365586HY4DMG76QJ9E"
     domain_name: daw86s.space
-    instance:
+    instances:
     - mongodb # i can create multiple instances by adding more names here
   tasks:
-  - name: create ec2 instance 
+  - name: create ec2 instances 
     amazon.aws.ec2_instance:
       name: "{{ item }}"
       instance_type: t3.micro
@@ -17,7 +17,7 @@
       image_id: "{{ ami_id }}"
       tags:
         Name: "{{ item }}" # to get a clear name in aws console
-    loop: "{{ instance }}"
+    loop: "{{ instances }}"
     register: ec2_output
 
 #   - name: print the ec2 output
@@ -35,14 +35,25 @@
 #   loop: "{{ ec2_output.results }}"
 
 
+# - name: create route53 record
+#   amazon.aws.route53:
+#     state: present
+#     zone: "{{ domain_name }}"
+#     record: "{{ item.item }}.{{ domain_name }}" #  this gives mongodb.daws86s.space
+#     type: A
+#     ttl: 1
+#     value: "{{ item.instances[0].private_ip_address }}"
+#     overwrite: true
+#   loop: "{{ ec2_output.results }}"
+
+
 - name: create route53 record
   amazon.aws.route53:
-    state: present
-    zone: "{{ domain_name }}"
-    record: "{{ item.item }}.{{ domain_name }}" #  this gives mongodb.daws86s.space
-    type: A
-    ttl: 1
-    value: "{{ item.instances[0].private_ip_address }}"
-    overwrite: true
+      state: present
+      zone: "{{ domain_name }}"
+      record: "{{ item.item }}.{{ domain_name }}" # mongodb.daws86s.fun
+      type: A
+      ttl: 1
+      value: "{{ item.instances[0].private_ip_address }}"
+      overwrite: true
   loop: "{{ ec2_output.results }}"
-     
