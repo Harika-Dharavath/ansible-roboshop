@@ -12,6 +12,7 @@
     - redis
     - mongodb
     - rabbitmq
+    - shipping
   tasks:
   - name: create ec2 instances 
     amazon.aws.ec2_instance:
