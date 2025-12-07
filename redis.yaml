@@ -3,7 +3,7 @@
   become: true
   tasks:
   - name: disable default redis repo
-    ansible.builtin.command: dnf moduke disable redis -y
+    ansible.builtin.command: dnf module disable redis -y
 
   - name: configure redis to allow remote connections
     ansible.builtin.command: dnf module enable redis -y
