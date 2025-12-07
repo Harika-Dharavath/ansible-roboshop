@@ -7,7 +7,10 @@
     zone_id: "Z0365586HY4DMG76QJ9E"
     domain_name: daw86s.space
     instances:
-    - mongodb # i can create multiple instances by adding more names here
+    - mongodb # i can create multiple instances by adding more names h0ere
+    - redis
+    - mysql
+    - rabbitmq
   tasks:
   - name: create ec2 instances 
     amazon.aws.ec2_instance:
@@ -45,7 +48,7 @@
 #     value: "{{ item.instances[0].private_ip_address }}"
 #     overwrite: true
 #   loop: "{{ ec2_output.results }}"
-
+c
 
   - name: create route53 record
     amazon.aws.route53:
